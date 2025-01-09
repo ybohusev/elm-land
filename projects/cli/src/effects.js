@@ -491,7 +491,11 @@ const build = async (config) => {
   // Typecheck any TypeScript interop
   await TypeScriptPlugin.verifyTypescriptCompiles()
 
+  let debug = false
+  try { debug = config.app.elm[mode()].debugger }
+  catch (_) { }
   // Build app in dist folder
+
   try {
     await _build({
       configFile: false,
@@ -502,7 +506,7 @@ const build = async (config) => {
       envPrefix: 'ELM_LAND_',
       plugins: [
         ElmVitePlugin({
-          mode: 'minify',
+          mode: debug ? 'debug' : 'minify',
           isBodyPatchEnabled: false
         })
       ],
